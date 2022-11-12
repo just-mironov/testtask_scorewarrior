@@ -1,0 +1,12 @@
+version : "3"
+services :
+  nginx:
+    image: nginx:latest
+    container_name: webserver
+    ports:
+      - 80:80
+    volumes:
+      - /root/nginx/conf:/etc/nginx/conf.d:ro #настройка редиректа
+      - /root/nginx/www:/usr/share/nginx/html #домашняя категория
+      - /root/nginx/log:/var/log/nginx #log файлы
+    restart: unless-stopped
