@@ -1,0 +1,14 @@
+prod:
+  hosts:
+    ubuntu(prod):
+      ansible_host: 167.99.41.253
+      ansible_user: root
+test:
+  hosts:
+    ubuntu:
+      ansible_host: ubuntuserver-22
+    debian:
+      ansible_host: kali
+  vars:
+      ansible_user: slevin
+      ansible_sudo_pass: "{{ sudo_password }}"
