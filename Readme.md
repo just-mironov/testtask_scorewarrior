@@ -6,9 +6,12 @@
 
 При переходе в [корень](http://167.99.41.253) показывает картинку, при любой другой ссылке [index.html](http://167.99.41.253/example)
 
-Запуск:
+Проверка подключения:
 
       ansible all -m ping -i inventory.yml -e @secrets_file.enc --vault-password-file password_file --limit test,prod
+
+Запуск:
+
       ansible-playbook -i inventory.yml -e @secrets_file.enc --vault-password-file password_file playbook.yml --limit test,prod
 
 Vault:
