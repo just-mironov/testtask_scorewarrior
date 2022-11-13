@@ -1,0 +1,38 @@
+---
+- name: Install nginx in docker via docker-compose
+  hosts: all
+
+  tasks:
+  - name: Update apt repo and cache on all Debian/Ubuntu
+    become: yes
+    apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+
+  - name: Install required packages
+    become: yes
+    apt: name={{ item }}
+    with_items:
+      - docker
+      - docker-compose
+
+  - name: Start docker on boot
+    become: yes
+    systemd:
+      name: docker
+      state: started
+      enabled: yes
+
+  - name: Create a directory if it does not exist
+    ansible.builtin.file:
+      path: "/home/{{ansible_user}}/nginx"
+      state: directory
+
+  - name: Copy files
+    ansible.builtin.copy:
+      src: "{{playbook_dir}}/../nginx"
+      dest: "/home/{{ansible_user}}/"
+
+  - name: Run container
+    become: yes
+    shell:
+      cmd: "docker-compose -f docker-compose.yml up -d"
+      chdir: "/home/{{ansible_user}}/nginx"

@@ -1,24 +1,33 @@
 Тестовое задание ansible+nginx+compose
 --------------------------------------
->  Запуск nginx на удаленных серверах перечисленных в ansible/inventory.yaml.
->  На удаленной машине используется логин root с правами sudo.
+>  Запуск nginx на удаленных серверах перечисленных в inventory.yaml.
+>  На удаленной машине нужен sudo.
 >  Должен быть доступ по ssh.
 
-При переходе в [корень](http://167.99.41.253) показывает index.html, при другой ссылке [картинку](http://167.99.41.253/example)
+При переходе в [корень](http://167.99.41.253) показывает картинку, при любой другой ссылке [index.html](http://167.99.41.253/example)
 
 Запуск:
 
-      ansible-playbook deploynginx.yml -i inventory.yaml
+      ansible all -m ping -i inventory.yml -e @secrets_file.enc --vault-password-file password_file --limit test,prod
+      ansible-playbook -i inventory.yml -e @secrets_file.enc --vault-password-file password_file playbook.yml --limit test,prod
+
+Vault:
+      Пароль для vault'a лежит password_file, пароль от sudo лежит в secrets_file.
+
 
 Структура:
 
-    ├── Readme.txt
+
+    ├── Readme.md
     ├── ansible
-    │   ├── deploynginx.yml
-    │   └── inventory.yaml
+    │   ├── inventory.yml
+    │   ├── password_file
+    │   ├── playbook.yml
+    │   └── secrets_file.enc
     └── nginx
         ├── conf
-        │   └── example.conf
+        │   ├── example.com.bak
+        │   └── example.conf
         ├── docker-compose.yml
         ├── log
         └── www
